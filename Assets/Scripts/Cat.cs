@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cat : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class Cat : Animal{
+
+    void Start(){
+		player = GameObject.Find("Player");
+		rb = GetComponent<Rigidbody>();
+	}
+
+	// Polymorphism
+	public override void FollowPlayer(){
+        Vector3 lookDirection = (player.transform.position - transform.position).normalized;
+        rb.AddForce(lookDirection.normalized * movementSpeed);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void Update(){
+    	Vector3 LookAt = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+        if(isPlayersPet){
+        	transform.LookAt(LookAt);
+
+        	if(Vector3.Distance(transform.position, player.transform.position) < 4){
+                FollowPlayer();
+                // Inheritance
+            }
+        }
+        if(Random.Range(1, 100) == 100){
+        	Talk("Meow");
+        }
     }
 }
